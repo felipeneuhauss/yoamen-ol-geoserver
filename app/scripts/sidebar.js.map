@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "sidebar.js",
+  "sourceRoot": "",
+  "sources": [
+    "sidebar.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;AAAA,MAAA;;EAAA,QAAA,GAAW,CAAC,CAAC,QAAF,CAAW,QAAQ,CAAC,QAAT,CAAkB,QAAA,GAAS,oCAA3B,CAAX;;EACX,CAAA,CAAE,mBAAF,CAAsB,CAAC,IAAvB,CAA4B,QAAA,CAAS;IAAA,IAAA,EAAK,QAAL;GAAT,CAA5B;AADA"
+}
