@@ -1,6 +1,11 @@
 console.log '\'Allo \'Allo!'
-console.log 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=siga:CI_CANTEIRO_OBRA&outputFormat=application/json&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO=9816'
+console.log 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=siga:CI_CANTEIRO_OBRA&outputFormat=text/javascript&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO=9816'
 # eslint-disable-line no-console
+
+
+window.loadFeatures = (response) ->
+  vectorSource.addFeatures geojsonFormat.readFeatures(response)
+  return
 
 ###*
 # Helper method for map-creation.
@@ -11,9 +16,6 @@ console.log 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.0.
 
 createMap = (divId) ->
 
-  $.get('http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=siga:CI_CANTEIRO_OBRA&outputFormat=application/json&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO=9816', (result)->
-    console.log(result)
-  )
 
   baseMapLayer = new ol.layer.Tile
     source: new ol.source.OSM()
@@ -28,13 +30,27 @@ createMap = (divId) ->
     )
   )
 
+  geojsonFormat = new ol.format.GeoJSON();
+
+  vectorSource = new (ol.source.Vector)(
+    loader: (extent, resolution, projection) ->
+      urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:CB_DIVISAO_HIDROGRAFICA&maxFeatures=9999&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857'
+      # use jsonp: false to prevent jQuery from adding the "callback"
+      # parameter to the URL
+      $.ajax
+        url: urljson
+        dataType: 'jsonp'
+        jsonCallback: 'parseResponse'
+      return
+    projection: 'EPSG:3857'
+    strategy: new ol.loadingstrategy.tile(ol.tilegrid.createXYZ(maxZoom: 19)))
+
+
   vector = new ol.layer.Vector(
-    source: new ol.source.Vector(
-      url: BASE_URL+'/geojson/geojson.json',
-      format: new ol.format.GeoJSON()
-    ),
+    source: vectorSource,
     style: style
   )
+
 
   map = new ol.Map(
     layers: [baseMapLayer, vector],
