@@ -1,3 +1,8 @@
+/**
+ * Aquivo que possui funcoes executadas em qualquer lugar da aplicacao
+ * @type {{template: Function, get: Function, plugin: Function, load: Function}}
+ */
+
 window.CoreView = {
     template : function(url) {
         var data = "<h1> failed to load url : " + url + "</h1>",

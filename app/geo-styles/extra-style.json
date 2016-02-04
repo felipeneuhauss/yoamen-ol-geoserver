@@ -1,0 +1,18 @@
+[
+{"id": "UC", "style": [
+	{"id": "UNIDADE_DE_PROTECAO_INTEGRAL", "stroke": "#005500",  "strokeWidth": 0.5, "fill": "#005500", "fillOpacity": 0.7},
+	{"id": "UNIDADE_DE_USO_SUSTENTAVEL", "stroke": "#00FF00",  "strokeWidth": 0.5, "fill": "#00FF00", "fillOpacity": 0.7}
+]},
+{"id": "UC_ESFERA", "style": [
+	{"id": "AREA_DE_RELEVANTE_INTERESSE_ECOLOGICO", "stroke": "#FFFFFF",  "strokeWidth": 0.5, "fill": "#FFAA00"},
+	{"id": "ESTACAO_ECOLOGICA", "stroke": "#FFFFFF",  "strokeWidth": 0.5, "fill": "#555500"},
+	{"id": "FLORESTA", "stroke": "#FFFFFF", "strokeWidth": 0.5, "fill": "#00AA00"},
+	{"id": "MONUMENTO_NATURAL", "stroke": "#FFFFFF",  "strokeWidth": 0.5, "fill": "#AA55FF"},
+	{"id": "PARQUE", "stroke": "#FFFFFF",  "strokeWidth": 0.5, "fill": "#00FF00"},
+	{"id": "REFUGIO_DE_VIDA_SILVESTRE", "stroke": "#FFFFFF",  "strokeWidth": 0.5, "fill": "#FF007F"},
+	{"id": "RESERVA_BIOLOGICA", "stroke": "#FFFFFF",  "strokeWidth": 0.5, "fill": "#0000FF"},
+	{"id": "RESERVA_DE_DESENVOLVIMENTO_SUSTENTAVEL", "stroke": "#FFFFFF",  "strokeWidth": 0.5, "fill": "#FFFF00"},
+	{"id": "RESERVA_EXTRATIVISTA", "stroke": "#FFFFFF",  "strokeWidth": 0.5, "fill": "#AA0000"},
+	{"id": "RESERVA_PARTICULAR_DO_PATRIMONIO_NATURAL", "stroke": "#FFFFFF",  "strokeWidth": 0.5, "fill": "#55557F"}
+]}
+]
