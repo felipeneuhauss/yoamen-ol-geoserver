@@ -219,7 +219,7 @@ body {
 #sidebar {
   background-color: #ffffff;
   float: right;
-  height: 100vh;
+  height: 168px;
   margin-top: 0;
   padding: 0;
   position: absolute;
@@ -269,4 +269,9 @@ body {
   border:0px;
   border-shadow: 0px;
   box-shadow: 0px;
+}
+//customiza a caixa de texto do HELP
+div#help {
+    overflow: auto;
+    height: 495px;
 }
