@@ -137,12 +137,11 @@
 {"id": "CI_UNIDADE_ANTIARRASTO", "strokeWidth": 0.2, "fill": "#00FF00"},
 {"id": "CI_USINA_TERMELETRICA", "stroke": "#009600",  "strokeWidth": 1.5, "fill": "#009600" , "fillOpacity": 0.5},
 {"id": "CI_USINA_TERMONUCLEAR", "stroke": "#009900",  "strokeWidth": 1.5, "fill": "#009900" , "fillOpacity": 0.2},
-{"id": "CI_VIA_ACESSO"},
+{"id": "CI_VIA_ACESSO", "fillOpacity": 0.15, "fill": "transparent", "stroke": "#000000"},
 {"id": "CI_VIADUTO_FERROVIARIO", "stroke": "#00FF00"},
 {"id": "CI_VIADUTO_RODOVIARIO", "stroke": "#00FF00"},
 {"id": "CI_ALIJAMENTO_EMBARCACOES_COM_LABEL", "strokeWidth": 0.2, "fill": "#FFCC00" },
 {"id": "CI_AREA_ESTUDO_COM_LABEL", "stroke": "#FF0000",  "strokeWidth": 1.5, "fill": "tranparent"},
 {"id": "CI_AREA_PROJETO_COM_LABEL", "stroke": "#660000",  "strokeWidth": 1.5, "fill": "#660000", "fillOpacity": 0.15},
 {"id": "CD_PROGRESSAO_EMPREENDIMENTO_COM_LABEL", "fill": "#000000"}
-
 ]

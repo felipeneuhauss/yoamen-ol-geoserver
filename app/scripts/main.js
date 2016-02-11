@@ -36,6 +36,7 @@
     urlJson = window.location.origin + '/empreendimento.json';
     return $.getJSON(urlJson, function(data) {
       var baseLayer, layers, styles;
+      window.enterprises = data;
       baseLayer = new ol.layer.Tile({
         source: new ol.source.OSM()
       });
@@ -44,49 +45,47 @@
       layers.push(baseLayer);
       data.forEach(function(el, index) {
         var geojsonFormat, structureStyle, urljson, vector, vectorSource;
-        if (el.ttTpEstrutura.noTabelaEstrutura === 'CI_CANTEIRO_OBRA') {
-          console.log(el.ttTpEstrutura.noTabelaEstrutura);
-          urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:' + el.ttTpEstrutura.noTabelaEstrutura + '&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO=' + $('#empreendimentoId').val() + '&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857';
-          console.log(urljson);
-          structureStyle = _.find(styles, function(elem) {
-            return elem.id === el.ttTpEstrutura.noTabelaEstrutura;
-          });
-          console.log(structureStyle, el.ttTpEstrutura.noTabelaEstrutura);
-          geojsonFormat = new ol.format.GeoJSON;
-          vectorSource = new ol.source.Vector({
-            loader: function(extent, resolution, projection) {
-              $.ajax({
-                url: urljson,
-                dataType: 'jsonp',
-                jsonCallback: 'parseResponse'
-              });
-            }
-          });
+        console.log(el.ttTpEstrutura.noTabelaEstrutura);
+        urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:' + el.ttTpEstrutura.noTabelaEstrutura + '&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO=' + $('#empreendimentoId').val() + '&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857';
+        console.log(urljson);
+        structureStyle = _.find(styles, function(elem) {
+          return elem.id === el.ttTpEstrutura.noTabelaEstrutura;
+        });
+        console.log(structureStyle, el.ttTpEstrutura.noTabelaEstrutura);
+        geojsonFormat = new ol.format.GeoJSON;
+        vectorSource = new ol.source.Vector({
+          loader: function(extent, resolution, projection) {
+            $.ajax({
+              url: urljson,
+              dataType: 'jsonp',
+              jsonCallback: 'parseResponse'
+            });
+          }
+        });
 
-          /**
-           * JSONP WFS callback function.
-           * @param {Object} response The response object.
-           */
-          window.loadFeatures = function(response) {
-            console.log(response);
-            vectorSource.addFeatures(geojsonFormat.readFeatures(response));
-          };
-          console.log(structureStyle);
-          vector = new ol.layer.Vector({
-            source: vectorSource,
-            style: new ol.style.Style({
-              fill: new ol.style.Fill({
-                color: !_.isUndefined(structureStyle.fill) ? structureStyle.fill : null,
-                opacity: !_.isUndefined(structureStyle.fillOpacity) ? structureStyle.fillOpacity : null
-              }),
-              stroke: new ol.style.Stroke({
-                color: !_.isUndefined(structureStyle.stroke) ? structureStyle.stroke : null,
-                width: !_.isUndefined(structureStyle.strokeWidth) ? structureStyle.strokeWidth : 0
-              })
+        /**
+         * JSONP WFS callback function.
+         * @param {Object} response The response object.
+         */
+        window.loadFeatures = function(response) {
+          console.log(response);
+          vectorSource.addFeatures(geojsonFormat.readFeatures(response));
+        };
+        console.log(structureStyle);
+        vector = new ol.layer.Vector({
+          source: vectorSource,
+          style: new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: !_.isUndefined(structureStyle.fill) ? structureStyle.fill : null,
+              opacity: !_.isUndefined(structureStyle.fillOpacity) ? structureStyle.fillOpacity : null
+            }),
+            stroke: new ol.style.Stroke({
+              color: !_.isUndefined(structureStyle.stroke) ? structureStyle.stroke : null,
+              width: !_.isUndefined(structureStyle.strokeWidth) ? structureStyle.strokeWidth : 0
             })
-          });
-          return layers.push(vector);
-        }
+          })
+        });
+        return layers.push(vector);
       });
       window.map = new ol.Map({
         layers: layers,

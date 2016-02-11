@@ -34,6 +34,8 @@ createMap = () ->
 
   $.getJSON urlJson, (data) ->
 
+    window.enterprises = data
+
     baseLayer = new ol.layer.Tile({source: new ol.source.OSM()})
 
     layers = [];
@@ -87,51 +89,51 @@ createMap = () ->
     # Para cada estrutura vai ao geoserver pega as features
     data.forEach((el, index)->
 
-      if el.ttTpEstrutura.noTabelaEstrutura == 'CI_CANTEIRO_OBRA'
-        console.log(el.ttTpEstrutura.noTabelaEstrutura);
-        urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:'+ el.ttTpEstrutura.noTabelaEstrutura+'&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO='+$('#empreendimentoId').val()+'&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857'
-        console.log(urljson)
+      #if el.ttTpEstrutura.noTabelaEstrutura == 'CI_CANTEIRO_OBRA'
+      console.log(el.ttTpEstrutura.noTabelaEstrutura);
+      urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:'+ el.ttTpEstrutura.noTabelaEstrutura+'&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO='+$('#empreendimentoId').val()+'&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857'
+      console.log(urljson)
 
-        structureStyle = _.find styles, (elem) ->
-          elem.id == el.ttTpEstrutura.noTabelaEstrutura
+      structureStyle = _.find styles, (elem) ->
+        elem.id == el.ttTpEstrutura.noTabelaEstrutura
 
 
-        console.log(structureStyle, el.ttTpEstrutura.noTabelaEstrutura)
+      console.log(structureStyle, el.ttTpEstrutura.noTabelaEstrutura)
 
-        # format used to parse WFS GetFeature responses
-        geojsonFormat = new (ol.format.GeoJSON)
-        vectorSource = new (ol.source.Vector)(loader: (extent, resolution, projection) ->
-          #8854
-          $.ajax
-            url: urljson
-            dataType: 'jsonp'
-            jsonCallback: 'parseResponse'
-          return
-        )
+      # format used to parse WFS GetFeature responses
+      geojsonFormat = new (ol.format.GeoJSON)
+      vectorSource = new (ol.source.Vector)(loader: (extent, resolution, projection) ->
+        #8854
+        $.ajax
+          url: urljson
+          dataType: 'jsonp'
+          jsonCallback: 'parseResponse'
+        return
+      )
 
-        ###*
-        # JSONP WFS callback function.
-        # @param {Object} response The response object.
-        ###
+      ###*
+      # JSONP WFS callback function.
+      # @param {Object} response The response object.
+      ###
 
-        window.loadFeatures = (response) ->
-          console.log(response)
-          vectorSource.addFeatures geojsonFormat.readFeatures(response)
-          return
+      window.loadFeatures = (response) ->
+        console.log(response)
+        vectorSource.addFeatures geojsonFormat.readFeatures(response)
+        return
 
-        # {"id": "CI_AREA_ESTUDO", "stroke": "#FF0000", "strokeWidth": 1.5, "fill": "transparent"},
-        console.log(structureStyle)
-        vector = new (ol.layer.Vector)(
-          source: vectorSource
-          style: new (ol.style.Style)(
-            fill: new (ol.style.Fill)(
-              color: if !_.isUndefined(structureStyle.fill) then structureStyle.fill else null
-              opacity: if !_.isUndefined(structureStyle.fillOpacity) then structureStyle.fillOpacity else null)
-            stroke: new (ol.style.Stroke)(
-              color: if !_.isUndefined(structureStyle.stroke) then structureStyle.stroke else null
-              width: if !_.isUndefined(structureStyle.strokeWidth) then structureStyle.strokeWidth else 0)))
+      # {"id": "CI_AREA_ESTUDO", "stroke": "#FF0000", "strokeWidth": 1.5, "fill": "transparent"},
+      console.log(structureStyle)
+      vector = new (ol.layer.Vector)(
+        source: vectorSource
+        style: new (ol.style.Style)(
+          fill: new (ol.style.Fill)(
+            color: if !_.isUndefined(structureStyle.fill) then structureStyle.fill else null
+            opacity: if !_.isUndefined(structureStyle.fillOpacity) then structureStyle.fillOpacity else null)
+          stroke: new (ol.style.Stroke)(
+            color: if !_.isUndefined(structureStyle.stroke) then structureStyle.stroke else null
+            width: if !_.isUndefined(structureStyle.strokeWidth) then structureStyle.strokeWidth else 0)))
 
-        layers.push(vector)
+      layers.push(vector)
     )
 
     # Cria o mapa com as layers
