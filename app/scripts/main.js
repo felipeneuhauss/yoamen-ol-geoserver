@@ -35,7 +35,7 @@
     var urlJson;
     urlJson = window.location.origin + '/empreendimento.json';
     return $.getJSON(urlJson, function(data) {
-      var baseLayer, layers, map, styles;
+      var baseLayer, layers, styles;
       baseLayer = new ol.layer.Tile({
         source: new ol.source.OSM()
       });
@@ -44,7 +44,7 @@
       layers.push(baseLayer);
       data.forEach(function(el, index) {
         var geojsonFormat, structureStyle, urljson, vector, vectorSource;
-        if (el.ttTpEstrutura.noTabelaEstrutura === 'CI_AREA_ESTUDO') {
+        if (el.ttTpEstrutura.noTabelaEstrutura === 'CI_CANTEIRO_OBRA') {
           console.log(el.ttTpEstrutura.noTabelaEstrutura);
           urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:' + el.ttTpEstrutura.noTabelaEstrutura + '&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO=' + $('#empreendimentoId').val() + '&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857';
           console.log(urljson);
@@ -71,13 +71,13 @@
             console.log(response);
             vectorSource.addFeatures(geojsonFormat.readFeatures(response));
           };
-          console.log(!_.isUndefined(structureStyle.fill));
+          console.log(structureStyle);
           vector = new ol.layer.Vector({
             source: vectorSource,
             style: new ol.style.Style({
               fill: new ol.style.Fill({
                 color: !_.isUndefined(structureStyle.fill) ? structureStyle.fill : null,
-                fillOpacity: !_.isUndefined(structureStyle.fill) ? structureStyle.fillOpacity : 0
+                opacity: !_.isUndefined(structureStyle.fillOpacity) ? structureStyle.fillOpacity : null
               }),
               stroke: new ol.style.Stroke({
                 color: !_.isUndefined(structureStyle.stroke) ? structureStyle.stroke : null,
@@ -88,7 +88,7 @@
           return layers.push(vector);
         }
       });
-      map = new ol.Map({
+      window.map = new ol.Map({
         layers: layers,
         target: 'map',
         view: new ol.View({

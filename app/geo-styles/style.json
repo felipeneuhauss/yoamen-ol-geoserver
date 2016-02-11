@@ -53,7 +53,7 @@
 {"id": "CI_CAMINHO_SERVICO", "stroke": "#0000FF"},
 {"id": "CI_CANAL_NAVEGACAO", "stroke": "#0000FF",  "strokeWidth": 1.5, "fill": "#0000FF" , "fillOpacity": 0.1, "strokeOpacity": 0.5},
 {"id": "CI_CANALIZACAO_ARTIFICIAL", "stroke": "#000099",  "strokeWidth": 1.5, "strokeDasharray": [4.0, 4.0]},
-{"id": "CI_CANTEIRO_OBRA", "fillOpacity": 0.15},
+{"id": "CI_CANTEIRO_OBRA", "fillOpacity": 0.15, "fill": "transparent"},
 {"id": "CI_CASA_FORCA", "stroke": "#663300",  "strokeWidth": 1.5, "fill": "#663300" , "fillOpacity": 0.5},
 {"id": "CI_CENTRAL_NUCLEAR", "stroke": "#990000",  "strokeWidth": 1.5, "fill": "#990000" , "fillOpacity": 0.1},
 {"id": "CI_CONDUTOR_HIDRICO", "stroke": "#011BAE",  "strokeWidth": 1.5},
