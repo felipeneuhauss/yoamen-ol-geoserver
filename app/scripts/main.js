@@ -35,14 +35,17 @@
     var urlJson;
     urlJson = window.location.origin + '/empreendimento.json';
     return $.getJSON(urlJson, function(data) {
-      var baseLayer, layers, styles;
+      var baseLayer, layers, styles, infoTag, subtitle;
       window.enterprises = data;
       baseLayer = new ol.layer.Tile({
         source: new ol.source.OSM()
       });
       layers = [];
       styles = getStyles();
+      infoTag = [];
+      subtitle = document.getElementById("subtitle");
       layers.push(baseLayer);
+
       data.forEach(function(el, index) {
         var geojsonFormat, structureStyle, urljson, vector, vectorSource;
         console.log(el.ttTpEstrutura.noTabelaEstrutura);
@@ -67,8 +70,9 @@
          * JSONP WFS callback function.
          * @param {Object} response The response object.
          */
+
         window.loadFeatures = function(response) {
-          console.log(response);
+         console.log(response);
           vectorSource.addFeatures(geojsonFormat.readFeatures(response));
         };
         console.log(structureStyle);
@@ -85,8 +89,15 @@
             })
           })
         });
-        return layers.push(vector);
+        return layers.push(vector), 
+                infoTag.push("<tr><td>"+el.ttTpEstrutura.noTpEstrutura+"<img class='pull-right' src='http://10.1.25.80:10001//"+
+                 "geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=15&HEIGHT=15&layer="+
+                 el.ttTpEstrutura.noTabelaEstrutura+"'/></td></tr>")
       });
+      
+      subtitle.innerHTML = infoTag;
+      subtitle.removeChild(subtitle.lastChild);
+
       window.map = new ol.Map({
         layers: layers,
         target: 'map',
