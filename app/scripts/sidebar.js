@@ -15,5 +15,3 @@
   $('#help').html(compiledHelp());
 
 }).call(this);
-
-//# sourceMappingURL=sidebar.js.map
