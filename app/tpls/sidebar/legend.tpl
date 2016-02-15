@@ -1,4 +1,4 @@
-<table class="table table-striped" id="legends">
+<table class="table table-hover" id="legends">
     <% _.each(legends, function(legend){ %>
     <tr>
         <td><%= legend.elementName %>

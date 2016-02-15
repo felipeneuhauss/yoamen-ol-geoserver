@@ -3,7 +3,7 @@
   var setSidebar;
 
   setSidebar = setInterval((function() {
-    var compiled, compiledHelp, compiledLegend;
+    var compiled, compiledBasemap, compiledHelp, compiledLegend;
     if (!_.isUndefined(window.legends) && !_.isUndefined(window.elementsProject)) {
       compiled = _.template(CoreView.template(BASE_URL + '/tpls/sidebar/project-elements.tpl'));
       $('#project-elements').html(compiled({
@@ -16,8 +16,14 @@
         geoServerLegendLink: window.geoServerLegendLink,
         "legends": window.legends
       }));
+      compiledBasemap = _.template(CoreView.template(BASE_URL + '/tpls/sidebar/basemap.tpl'));
+      $('#basemap').html(compiledBasemap({
+        baseMaps: window.baseMaps
+      }));
       clearInterval(setSidebar);
     }
   }), 100);
 
 }).call(this);
+
+//# sourceMappingURL=sidebar.js.map

@@ -68,6 +68,7 @@ module.exports = function (grunt) {
       livereload: {
         options: {
           files: [
+            '<%= config.app %>/tpl/*.tpl',
             '<%= config.app %>/{,*/}*.html',
             '.tmp/styles/{,*/}*.css',
             '<%= config.app %>/images/{,*/}*',

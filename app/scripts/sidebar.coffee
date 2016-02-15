@@ -6,9 +6,12 @@ setSidebar = setInterval((->
     compiledHelp = _.template(CoreView.template(BASE_URL+'/tpls/sidebar/help.tpl'))
     $('#help').html(compiledHelp())
 
-
     compiledLegend = _.template(CoreView.template(BASE_URL+'/tpls/sidebar/legend.tpl'))
     $('#legend').html(compiledLegend(geoServerLegendLink: window.geoServerLegendLink, "legends": window.legends))
+
+    compiledBasemap = _.template(CoreView.template(BASE_URL+'/tpls/sidebar/basemap.tpl'))
+    $('#basemap').html(compiledBasemap(baseMaps: window.baseMaps))
+
     clearInterval(setSidebar)
   return
 ), 100)

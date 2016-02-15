@@ -19,6 +19,39 @@ getStyles = ()->
 
   return response.responseJSON
 
+# Configura os basemaps
+getBaseMaps = () ->
+  layersMapa      = []
+  window.baseMaps = []
+
+  layersMapa = [
+    new ol.layer.Tile(
+      style: 'Base'
+      source: new ol.source.OSM())
+    new (ol.layer.Tile)(
+      style: 'Road'
+      source: new (ol.source.MapQuest)(layer: 'osm'))
+    new (ol.layer.Tile)(
+      style: 'Aerial'
+      visible: false
+      source: new (ol.source.MapQuest)(layer: 'sat'))
+    new (ol.layer.Group)(
+      style: 'AerialWithLabels'
+      visible: false
+      layers: [
+        new (ol.layer.Tile)(source: new (ol.source.MapQuest)(layer: 'sat'))
+        new (ol.layer.Tile)(source: new (ol.source.MapQuest)(layer: 'hyb'))
+      ])
+  ]
+
+  # Informacoes para serem mostradas no menu lateral
+  window.baseMaps.push(id: 'Base', name: 'Básico')
+  window.baseMaps.push(id: 'Road', name: 'Estradas')
+  window.baseMaps.push(id: 'Aerial', name: 'Terreno')
+  window.baseMaps.push(id: 'AerialWithLabels', name: 'Terreno com legendas')
+
+  return layersMapa
+
 
 
 ###*
@@ -36,14 +69,11 @@ createMap = () ->
 
     window.enterprises = data
 
-    baseLayer = new ol.layer.Tile({source: new ol.source.OSM()})
-
     layers = [];
 
-    styles = getStyles()
+    layers = getBaseMaps()
 
-    # Mapa base
-    layers.push(baseLayer)
+    styles = getStyles()
 
     window.legends = []
 
@@ -51,17 +81,11 @@ createMap = () ->
     # Para cada estrutura vai ao geoserver pega as features
     data.forEach((el, index)->
 
-      console.log(el)
       #if el.ttTpEstrutura.noTabelaEstrutura == 'CI_CANTEIRO_OBRA'
-      console.log(el.ttTpEstrutura.noTabelaEstrutura);
       urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:'+ el.ttTpEstrutura.noTabelaEstrutura+'&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO='+$('#empreendimentoId').val()+'&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857'
-      console.log(urljson)
 
       structureStyle = _.find styles, (elem) ->
         elem.id == el.ttTpEstrutura.noTabelaEstrutura
-
-
-      console.log(structureStyle, el.ttTpEstrutura.noTabelaEstrutura)
 
       # format used to parse WFS GetFeature responses
       geojsonFormat = new (ol.format.GeoJSON)
@@ -80,12 +104,10 @@ createMap = () ->
       ###
 
       window.loadFeatures = (response) ->
-        console.log(response)
         vectorSource.addFeatures geojsonFormat.readFeatures(response)
         return
 
       # {"id": "CI_AREA_ESTUDO", "stroke": "#FF0000", "strokeWidth": 1.5, "fill": "transparent"},
-      console.log(structureStyle)
       vector = new (ol.layer.Vector)(
         source: vectorSource
         style: new (ol.style.Style)(
@@ -97,10 +119,14 @@ createMap = () ->
             width: if !_.isUndefined(structureStyle.strokeWidth) then structureStyle.strokeWidth else 0)))
 
       layers.push(vector)
+
+      # Add as layers
+      window.layers = layers
+
+      # Inicializa as variaveis para a sidebar
       window.geoServerLegendLink = "http://10.1.25.80:10001//geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=15&HEIGHT=15&layer="
       window.legends.push("element":el.ttTpEstrutura.noTabelaEstrutura, "elementName": el.ttTpEstrutura.noTpEstrutura)
       window.elementsProject.push("element":el.ttTpEstrutura.noTabelaEstrutura, "elementName": el.ttTpEstrutura.noTpEstrutura, "elementInfo": el.ttTpEstrutura.dsInfoEstrutura, )
-
     )
 
     # Cria o mapa com as layers
