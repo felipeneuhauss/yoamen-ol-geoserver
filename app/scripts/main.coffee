@@ -47,7 +47,7 @@ createMap = () ->
 
     window.legends = []
 
-    window.elementProject = []
+    window.elementsProject = []
     # Para cada estrutura vai ao geoserver pega as features
     data.forEach((el, index)->
 
@@ -99,7 +99,7 @@ createMap = () ->
       layers.push(vector)
       window.geoServerLegendLink = "http://10.1.25.80:10001//geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=15&HEIGHT=15&layer="
       window.legends.push("element":el.ttTpEstrutura.noTabelaEstrutura, "elementName": el.ttTpEstrutura.noTpEstrutura)
-      window.elementProject.push("element":el.ttTpEstrutura.noTabelaEstrutura, "elementInfo": el.ttTpEstrutura.noTpEstrutura)
+      window.elementsProject.push("element":el.ttTpEstrutura.noTabelaEstrutura, "elementName": el.ttTpEstrutura.noTpEstrutura, "elementInfo": el.ttTpEstrutura.dsInfoEstrutura, )
 
     )
 

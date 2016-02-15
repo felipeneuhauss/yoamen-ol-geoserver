@@ -44,6 +44,7 @@
       styles = getStyles();
       layers.push(baseLayer);
       window.legends = [];
+      window.elementsProject = [];
       data.forEach(function(el, index) {
         var geojsonFormat, structureStyle, urljson, vector, vectorSource;
         console.log(el);
@@ -89,10 +90,15 @@
         });
         layers.push(vector);
         window.geoServerLegendLink = "http://10.1.25.80:10001//geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=15&HEIGHT=15&layer=";
-        return window.legends.push({
+        window.legends.push({
           "element": el.ttTpEstrutura.noTabelaEstrutura,
           "elementName": el.ttTpEstrutura.noTpEstrutura
-        });   
+        });
+        return window.elementsProject.push({
+          "element": el.ttTpEstrutura.noTabelaEstrutura,
+          "elementName": el.ttTpEstrutura.noTpEstrutura,
+          "elementInfo": el.ttTpEstrutura.dsInfoEstrutura
+        });
       });
       window.map = new ol.Map({
         layers: layers,
