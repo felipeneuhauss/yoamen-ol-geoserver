@@ -35,19 +35,18 @@
     var urlJson;
     urlJson = window.location.origin + '/empreendimento.json';
     return $.getJSON(urlJson, function(data) {
-      var baseLayer, layers, styles, infoTag, subtitle;
+      var baseLayer, layers, styles;
       window.enterprises = data;
       baseLayer = new ol.layer.Tile({
         source: new ol.source.OSM()
       });
       layers = [];
       styles = getStyles();
-      infoTag = [];
-      subtitle = document.getElementById("subtitle");
       layers.push(baseLayer);
-
+      window.legends = [];
       data.forEach(function(el, index) {
         var geojsonFormat, structureStyle, urljson, vector, vectorSource;
+        console.log(el);
         console.log(el.ttTpEstrutura.noTabelaEstrutura);
         urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:' + el.ttTpEstrutura.noTabelaEstrutura + '&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO=' + $('#empreendimentoId').val() + '&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857';
         console.log(urljson);
@@ -70,9 +69,8 @@
          * JSONP WFS callback function.
          * @param {Object} response The response object.
          */
-
         window.loadFeatures = function(response) {
-         console.log(response);
+          console.log(response);
           vectorSource.addFeatures(geojsonFormat.readFeatures(response));
         };
         console.log(structureStyle);
@@ -89,15 +87,13 @@
             })
           })
         });
-        return layers.push(vector), 
-                infoTag.push("<tr><td>"+el.ttTpEstrutura.noTpEstrutura+"<img class='pull-right' src='http://10.1.25.80:10001//"+
-                 "geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=15&HEIGHT=15&layer="+
-                 el.ttTpEstrutura.noTabelaEstrutura+"'/></td></tr>")
+        layers.push(vector);
+        window.geoServerLegendLink = "http://10.1.25.80:10001//geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=15&HEIGHT=15&layer=";
+        return window.legends.push({
+          "element": el.ttTpEstrutura.noTabelaEstrutura,
+          "elementName": el.ttTpEstrutura.noTpEstrutura
+        });
       });
-      
-      subtitle.innerHTML = infoTag;
-      subtitle.removeChild(subtitle.lastChild);
-
       window.map = new ol.Map({
         layers: layers,
         target: 'map',
