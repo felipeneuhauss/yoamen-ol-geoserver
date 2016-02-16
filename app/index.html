@@ -97,7 +97,19 @@
                       </div>
                       <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                           <div class="panel-body" id="project-elements">
-                            <table class="table table-striped" id="elemProj"></table>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="panel panel-default">
+                      <div class="panel-heading" role="tab" id="headingFive">
+                          <h4 class="panel-title">
+                              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseOne">
+                                  <i class="fa fa-map-marker"></i> Mapas temáticos
+                              </a>
+                          </h4>
+                      </div>
+                      <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                          <div class="panel-body" id="thematic-maps" style="overflow: auto; height:500px;">
                           </div>
                       </div>
                   </div>
@@ -128,7 +140,7 @@
                       </div>
                   </div>
                   <div class="panel panel-default">
-                      <div class="panel-heading" role="tab" id="headingThree">
+                      <div class="panel-heading" role="tab" id="headingFour">
                           <h4 class="panel-title">
                               <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                   <i class="fa fa-question-circle"></i> Ajuda
@@ -136,7 +148,7 @@
                           </h4>
                       </div>
                       <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                          <div class="panel-body" id="help"></div>
+                          <div class="panel-body" id="help" style="overflow: auto; height:400px;"></div>
                       </div>
                   </div>
               </div>
@@ -231,9 +243,6 @@
 //            })
 //        });
     </script>
-
-
-
     <!-- endbuild -->
 
      <!--build:js scripts/main.js -->
@@ -242,7 +251,8 @@
     <script src="scripts/core.js"></script>
     <script src="scripts/layout.js"></script>
     <script src="scripts/sidebar.js"></script>
-    <script src="scripts/elements-project.js"></script>
+    <script src="scripts/project-elements.js"></script>
+    <script src="scripts/thematic-map.js"></script>
     <script src="scripts/basemap.js"></script>
     <!-- endbuild -->
 

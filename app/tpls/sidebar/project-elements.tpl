@@ -1,6 +1,7 @@
 <div class="form-group">
 <p align="justify">Para enquadrar ou visualizar uma das feições declaradas, selecione um ou
-    mais elementos do projeto e clique no botão <b>ENQUADRAR</b> exibido acima</p>
+    mais elementos do projeto e clique no botão.</p>
+<p><a href="#" class="btn btn-default extent"><i class="fa fa-arrows-alt"></i> Enquadrar</a></p>
 <p><input type="checkbox"/> <b>Selecionar todos</b></p>
 
 <table class="table table-hover">
@@ -19,8 +20,11 @@
                 <i class='fa fa-info'></i>
             </button>
 
-            <img style="margin-right: 10px;" class='pull-right'
-                 src='http://10.1.25.80:10001/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=<%= element.element %>'/>
+            <a href="#" class="btn btn-default pull-right" style="margin-right:10px;">
+                <img class='pull-right'
+                     src='http://10.1.25.80:10001/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&layer=<%= element.element %>'/>
+            </a>
+
 		</td>
 	</tr>
 	<% }); %>

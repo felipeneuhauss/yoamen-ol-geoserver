@@ -3,8 +3,8 @@
   var setSidebar;
 
   setSidebar = setInterval((function() {
-    var compiled, compiledBasemap, compiledHelp, compiledLegend;
-    if (!_.isUndefined(window.legends) && !_.isUndefined(window.elementsProject)) {
+    var compiled, compiledBasemap, compiledHelp, compiledLegend, compiledThematicMaps;
+    if (!_.isUndefined(window.legends) && !_.isUndefined(window.elementsProject) && !_.isUndefined(window.thematicMaps)) {
       compiled = _.template(CoreView.template(BASE_URL + '/tpls/sidebar/project-elements.tpl'));
       $('#project-elements').html(compiled({
         elementsProject: window.elementsProject
@@ -19,6 +19,10 @@
       compiledBasemap = _.template(CoreView.template(BASE_URL + '/tpls/sidebar/basemap.tpl'));
       $('#basemap').html(compiledBasemap({
         baseMaps: window.baseMaps
+      }));
+      compiledThematicMaps = _.template(CoreView.template(BASE_URL + '/tpls/sidebar/thematic-maps.tpl'));
+      $('#thematic-maps').html(compiledThematicMaps({
+        thematicMaps: window.thematicMaps
       }));
       clearInterval(setSidebar);
     }

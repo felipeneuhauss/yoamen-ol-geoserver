@@ -1,5 +1,5 @@
 setSidebar = setInterval((->
-  if !_.isUndefined(window.legends) and !_.isUndefined(window.elementsProject)
+  if !_.isUndefined(window.legends) and !_.isUndefined(window.elementsProject) and !_.isUndefined(window.thematicMaps)
     compiled = _.template(CoreView.template(BASE_URL+'/tpls/sidebar/project-elements.tpl'))
     $('#project-elements').html(compiled(elementsProject:window.elementsProject))
 
@@ -12,6 +12,13 @@ setSidebar = setInterval((->
     compiledBasemap = _.template(CoreView.template(BASE_URL+'/tpls/sidebar/basemap.tpl'))
     $('#basemap').html(compiledBasemap(baseMaps: window.baseMaps))
 
+    compiledThematicMaps = _.template(CoreView.template(BASE_URL+'/tpls/sidebar/thematic-maps.tpl'))
+    $('#thematic-maps').html(compiledThematicMaps(thematicMaps: window.thematicMaps))
+
     clearInterval(setSidebar)
   return
 ), 100)
+
+
+
+
