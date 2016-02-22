@@ -8,7 +8,7 @@
       $('.extent').click(function() {
         var layer;
         layer = _.find(window.layers, function(layer) {
-          console.log(layer.get(id));
+          console.log(layer.get('id'));
           return layer.get('id') === 'CI_AREA_ESTUDO';
         });
         return window.map.getView().fit(layer.getSource().getExtent(), window.map.getSize());

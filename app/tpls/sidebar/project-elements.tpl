@@ -11,7 +11,9 @@
             <input type='checkbox' class="toggle-element" checked="checked"
                    id="<%= element.element %>">
             &nbsp;
+            <label for="<%= element.element %>">
             <%=element.elementName %>
+            </label>
         </td>
 		<td>
             <button type='button' class='btn btn-default pull-right' data-container='body'
