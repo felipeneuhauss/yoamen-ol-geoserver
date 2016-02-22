@@ -14,7 +14,6 @@
           layer = ref[i];
           styleLayerName = layer.get('style');
           if (['Road', 'Aerial', 'AerialWithLabels'].indexOf(styleLayerName) >= 0) {
-            console.log(layer, styleLayerName, styleLayerName === selectedStyleName);
             results.push(layer.set('visible', styleLayerName === selectedStyleName));
           } else {
             results.push(void 0);

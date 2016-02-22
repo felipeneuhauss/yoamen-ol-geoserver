@@ -8,10 +8,31 @@
       $('.extent').click(function() {
         var layer;
         layer = _.find(window.layers, function(layer) {
+          console.log(layer.get(id));
           return layer.get('id') === 'CI_AREA_ESTUDO';
         });
-        console.log(layer.get('id'));
         return window.map.getView().fit(layer.getSource().getExtent(), window.map.getSize());
+      });
+      $('.toggle-element').click(function() {
+        var checked, i, id, layer, len, ref, results;
+        id = $(this).attr('id');
+        console.log(id);
+        checked = $(this).is(':checked');
+        ref = window.layers;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          layer = ref[i];
+          if (!_.isUndefined(layer.get('projectElements'))) {
+            if (id === layer.get('id')) {
+              results.push(layer.set('visible', checked));
+            } else {
+              results.push(void 0);
+            }
+          } else {
+            results.push(void 0);
+          }
+        }
+        return results;
       });
       clearInterval(setElementsProject);
     }

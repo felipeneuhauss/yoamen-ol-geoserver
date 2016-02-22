@@ -1,6 +1,7 @@
 setSidebar = setInterval((->
   if !_.isUndefined(window.legends) and !_.isUndefined(window.elementsProject) and !_.isUndefined(window.thematicMaps)
     compiled = _.template(CoreView.template(BASE_URL+'/tpls/sidebar/project-elements.tpl'))
+    console.log(window.elementsProject)
     $('#project-elements').html(compiled(elementsProject:window.elementsProject))
 
     compiledHelp = _.template(CoreView.template(BASE_URL+'/tpls/sidebar/help.tpl'))

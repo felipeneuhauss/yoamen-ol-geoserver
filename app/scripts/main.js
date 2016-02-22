@@ -2,10 +2,6 @@
 (function() {
   var addElementsProjectLayers, addThematicMapsLayers, createMap, getBaseMaps, getStyles;
 
-  window.loadFeatures = function(response) {
-    vectorSource.addFeatures(geojsonFormat.readFeatures(response));
-  };
-
   getStyles = function() {
     var response;
     response = $.ajax({
@@ -16,6 +12,7 @@
         return data.responseJSON;
       }
     });
+    window.styles = response.responseJSON;
     return response.responseJSON;
   };
 
@@ -80,9 +77,9 @@
 
   addElementsProjectLayers = function(data, styles) {
     return data.forEach(function(el, index) {
-      var geojsonFormat, structureStyle, urljson, vector, vectorSource;
+      var geojsonFormat, structureStyle, style, urljson, vector, vectorSource;
       urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:' + el.ttTpEstrutura.noTabelaEstrutura + '&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO=' + $('#empreendimentoId').val() + '&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857';
-      structureStyle = _.find(styles, function(elem) {
+      var structureStyle = _.find(styles, function(elem) {
         return elem.id === el.ttTpEstrutura.noTabelaEstrutura;
       });
       geojsonFormat = new ol.format.GeoJSON;
@@ -90,6 +87,7 @@
         loader: function(extent, resolution, projection) {
           $.ajax({
             url: urljson,
+            async: false,
             dataType: 'jsonp',
             jsonCallback: 'parseResponse'
           });
@@ -105,8 +103,9 @@
       };
       vector = new ol.layer.Vector({
         id: el.ttTpEstrutura.noTabelaEstrutura,
+        projectElements: true,
         source: vectorSource,
-        style: new ol.style.Style({
+        style: style = new ol.style.Style({
           fill: new ol.style.Fill({
             color: !_.isUndefined(structureStyle.fill) ? structureStyle.fill : null,
             opacity: !_.isUndefined(structureStyle.fillOpacity) ? structureStyle.fillOpacity : null
@@ -172,6 +171,8 @@
       });
       wms = new ol.layer.Image({
         id: thematicMap.id,
+        thematicMap: true,
+        visible: false,
         source: new ol.source.ImageWMS({
           url: 'http://10.1.25.80:10001/geoserver/wms',
           params: {
@@ -180,7 +181,6 @@
           serverType: 'geoserver'
         })
       });
-      wms.setVisible(false);
       window.layers.push(wms);
       results.push(window.thematicMaps.push({
         "element": thematicMap.id,
@@ -216,6 +216,8 @@
         target: 'map',
         view: new ol.View({
           center: [-6019652.779802445, -1708175.0676016365],
+          maxZoom: 16,
+          minZoon: 4,
           zoom: 4
         })
       });

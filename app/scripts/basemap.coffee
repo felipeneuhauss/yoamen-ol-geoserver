@@ -8,7 +8,6 @@ setBaseMap = setInterval((->
       for layer in window.layers
         styleLayerName = layer.get('style')
         if (['Road', 'Aerial', 'AerialWithLabels'].indexOf(styleLayerName) >= 0)
-          console.log(layer, styleLayerName, styleLayerName == selectedStyleName)
           layer.set('visible', styleLayerName == selectedStyleName)
 
 

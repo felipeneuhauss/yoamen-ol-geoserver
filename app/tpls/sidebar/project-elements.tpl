@@ -2,13 +2,13 @@
 <p align="justify">Para enquadrar ou visualizar uma das feições declaradas, selecione um ou
     mais elementos do projeto e clique no botão.</p>
 <p><a href="#" class="btn btn-default extent"><i class="fa fa-arrows-alt"></i> Enquadrar</a></p>
-<p><input type="checkbox"/> <b>Selecionar todos</b></p>
+<!--<p><input type="checkbox" class="checked-all" checked="checked" /> <b>Selecionar todos</b></p> -->
 
 <table class="table table-hover">
 	<% _.each(elementsProject, function(element){ %>
 	<tr>
         <td>
-            <input type='checkbox' class="toggle-element"
+            <input type='checkbox' class="toggle-element" checked="checked"
                    id="<%= element.element %>">
             &nbsp;
             <%=element.elementName %>

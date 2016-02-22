@@ -5,17 +5,19 @@
   setThematicMap = setInterval((function() {
     if (!_.isUndefined(window.legends) && !_.isUndefined(window.elementsProject)) {
       $('.toggle-thematic-map').click(function() {
-        var layer;
-        layer = _.find(window.layers, function(layer) {
-          if (layer.get('id') === $(this).attr('id')) {
-            return true;
+        var i, id, layer, len, ref, results;
+        id = $(this).attr('id');
+        ref = window.layers;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          layer = ref[i];
+          if (!_.isUndefined(layer.get('thematicMap'))) {
+            results.push(layer.set('visible', id === layer.get('id')));
           } else {
-            return layer.setVisible(false);
+            results.push(void 0);
           }
-        });
-        layer.setVisible(true);
-        window.map.removeLayer(layer);
-        return window.map.addLayer(layer);
+        }
+        return results;
       });
       clearInterval(setThematicMap);
     }

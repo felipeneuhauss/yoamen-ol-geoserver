@@ -1,11 +1,6 @@
 #console.log '\'Allo \'Allo!'
 #console.log 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=siga:CI_CANTEIRO_OBRA&outputFormat=text/javascript&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO=9816'
 
-# eslint-disable-line no-console
-window.loadFeatures = (response) ->
-  vectorSource.addFeatures geojsonFormat.readFeatures(response)
-  return
-
 # Get FCA Styles
 getStyles = ()->
   response = $.ajax(
@@ -16,6 +11,7 @@ getStyles = ()->
       return data.responseJSON
   )
 
+  window.styles = response.responseJSON
   return response.responseJSON
 
 # Configura os basemaps
@@ -57,9 +53,7 @@ getBaseMaps = () ->
 addElementsProjectLayers = (data, styles) ->
   # Para cada estrutura vai ao geoserver pega as features
   data.forEach((el, index)->
-
-    #if el.ttTpEstrutura.noTabelaEstrutura == 'CI_CANTEIRO_OBRA'
-    urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:'+ el.ttTpEstrutura.noTabelaEstrutura+'&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO='+$('#empreendimentoId').val()+'&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857'
+    urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:'+el.ttTpEstrutura.noTabelaEstrutura+'&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO='+$('#empreendimentoId').val()+'&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857'
 
     structureStyle = _.find styles, (elem) ->
       elem.id == el.ttTpEstrutura.noTabelaEstrutura
@@ -70,6 +64,7 @@ addElementsProjectLayers = (data, styles) ->
       #8854
       $.ajax
         url: urljson
+        async :false
         dataType: 'jsonp'
         jsonCallback: 'parseResponse'
       return
@@ -84,11 +79,11 @@ addElementsProjectLayers = (data, styles) ->
       vectorSource.addFeatures geojsonFormat.readFeatures(response)
       return
 
-    # {"id": "CI_AREA_ESTUDO", "stroke": "#FF0000", "strokeWidth": 1.5, "fill": "transparent"},
     vector = new (ol.layer.Vector)(
       id: el.ttTpEstrutura.noTabelaEstrutura
+      projectElements: true
       source: vectorSource
-      style: new (ol.style.Style)(
+      style: style = new (ol.style.Style)(
         fill: new (ol.style.Fill)(
           color: if !_.isUndefined(structureStyle.fill) then structureStyle.fill else null
           opacity: if !_.isUndefined(structureStyle.fillOpacity) then structureStyle.fillOpacity else null)
@@ -126,14 +121,13 @@ addThematicMapsLayers = (styles) ->
       elem.id == styleName
 
     wms = new (ol.layer.Image)(
-      id: thematicMap.id
+      id: thematicMap.id,
+      thematicMap: true,
+      visible: false,
       source: new (ol.source.ImageWMS)(
         url: 'http://10.1.25.80:10001/geoserver/wms'
         params: 'LAYERS': 'siga:'+thematicMap.id
         serverType: 'geoserver'))
-
-    # Esconde a layer
-    wms.setVisible(false)
 
     # Add a layer ao projeto
     window.layers.push(wms)
@@ -174,6 +168,8 @@ createMap = () ->
       target: 'map',
       view: new ol.View(
         center: [-6019652.779802445, -1708175.0676016365],
+        maxZoom: 16,
+        minZoon: 4,
         zoom: 4
       )
     )

@@ -6,6 +6,7 @@
     var compiled, compiledBasemap, compiledHelp, compiledLegend, compiledThematicMaps;
     if (!_.isUndefined(window.legends) && !_.isUndefined(window.elementsProject) && !_.isUndefined(window.thematicMaps)) {
       compiled = _.template(CoreView.template(BASE_URL + '/tpls/sidebar/project-elements.tpl'));
+      console.log(window.elementsProject);
       $('#project-elements').html(compiled({
         elementsProject: window.elementsProject
       }));
