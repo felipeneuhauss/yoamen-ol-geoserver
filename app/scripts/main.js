@@ -2,6 +2,14 @@
 (function() {
   var addElementsProjectLayers, addThematicMapsLayers, createMap, getBaseMaps, getStyles;
 
+window.loadFeatures = function(response) {
+  var lastResponse = lastResponse;
+  return function (response) {
+    lastResponse  = response || lastResponse
+    return lastResponse
+  }
+}();
+
   getStyles = function() {
     var response;
     response = $.ajax({
@@ -21,35 +29,35 @@
     layersMapa = [];
     window.baseMaps = [];
     layersMapa = [
+    new ol.layer.Tile({
+      style: 'Base',
+      source: new ol.source.OSM()
+    }), new ol.layer.Tile({
+      style: 'Road',
+      source: new ol.source.MapQuest({
+        layer: 'osm'
+      })
+    }), new ol.layer.Tile({
+      style: 'Aerial',
+      visible: false,
+      source: new ol.source.MapQuest({
+        layer: 'sat'
+      })
+    }), new ol.layer.Group({
+      style: 'AerialWithLabels',
+      visible: false,
+      layers: [
       new ol.layer.Tile({
-        style: 'Base',
-        source: new ol.source.OSM()
-      }), new ol.layer.Tile({
-        style: 'Road',
-        source: new ol.source.MapQuest({
-          layer: 'osm'
-        })
-      }), new ol.layer.Tile({
-        style: 'Aerial',
-        visible: false,
         source: new ol.source.MapQuest({
           layer: 'sat'
         })
-      }), new ol.layer.Group({
-        style: 'AerialWithLabels',
-        visible: false,
-        layers: [
-          new ol.layer.Tile({
-            source: new ol.source.MapQuest({
-              layer: 'sat'
-            })
-          }), new ol.layer.Tile({
-            source: new ol.source.MapQuest({
-              layer: 'hyb'
-            })
-          })
-        ]
+      }), new ol.layer.Tile({
+        source: new ol.source.MapQuest({
+          layer: 'hyb'
+        })
       })
+      ]
+    })
     ];
     window.baseMaps.push({
       id: 'Base',
@@ -75,33 +83,29 @@
    * Add ao projeto as layers das estruturas do projeto
    */
 
-  addElementsProjectLayers = function(data, styles) {
+   addElementsProjectLayers = function(data, styles) {
     return data.forEach(function(el, index) {
       var geojsonFormat, structureStyle, style, urljson, vector, vectorSource;
       urljson = 'http://10.1.25.80:10001/geoserver/siga/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=siga:' + el.ttTpEstrutura.noTabelaEstrutura + '&maxFeatures=50&cql_filter=CD_PROGRESSAO_EMPREENDIMENTO=' + $('#empreendimentoId').val() + '&outputFormat=text/javascript&format_options=callback:loadFeatures&srsname=EPSG:3857';
       var structureStyle = _.find(styles, function(elem) {
         return elem.id === el.ttTpEstrutura.noTabelaEstrutura;
       });
-      geojsonFormat = new ol.format.GeoJSON;
-      vectorSource = new ol.source.Vector({
-        loader: function(extent, resolution, projection) {
-          $.ajax({
-            url: urljson,
-            async: false,
-            dataType: 'jsonp',
-            jsonCallback: 'parseResponse'
-          });
-        }
+      var geojsonFormat = new ol.format.GeoJSON;
+      var vectorSource = new ol.source.Vector({});
+      $.ajax({
+        url: urljson,
+        async: false,
+        dataType: 'jsonp',
+        jsonCallback: 'parseResponse'
+      }).always(function() {
+        vectorSource.addFeatures(geojsonFormat.readFeatures(loadFeatures()));
       });
 
       /**
        * JSONP WFS callback function.
        * @param {Object} response The response object.
        */
-      window.loadFeatures = function(response) {
-        vectorSource.addFeatures(geojsonFormat.readFeatures(response));
-      };
-      vector = new ol.layer.Vector({
+       vector = new ol.layer.Vector({
         id: el.ttTpEstrutura.noTabelaEstrutura,
         projectElements: true,
         source: vectorSource,
@@ -116,17 +120,17 @@
           })
         })
       });
-      window.layers.push(vector);
-      window.legends.push({
+       window.layers.push(vector);
+       window.legends.push({
         "element": el.ttTpEstrutura.noTabelaEstrutura,
         "elementName": el.ttTpEstrutura.noTpEstrutura
       });
-      return window.elementsProject.push({
+       return window.elementsProject.push({
         "element": el.ttTpEstrutura.noTabelaEstrutura,
         "elementName": el.ttTpEstrutura.noTpEstrutura,
         "elementInfo": el.ttTpEstrutura.dsInfoEstrutura
       });
-    });
+     });
   };
 
 
@@ -134,31 +138,31 @@
    *  Funcao que add os mapas tematicos
    */
 
-  addThematicMapsLayers = function(styles) {
+   addThematicMapsLayers = function(styles) {
     var i, len, results, structureStyle, styleName, thematicMap, thematicMaps, urljson, wms;
     thematicMaps = [
-      {
-        id: 'CB_AMAZONIA_LEGAL',
-        name: 'Amazônia Legal'
-      }, {
-        id: 'CB_UNIDADE_CONSERVACAO',
-        name: 'Unidade de Conservação'
-      }, {
-        id: 'CB_HIDROGRAFIA',
-        name: 'Hidrografia'
-      }, {
-        id: 'CB_MASSA_DAGUA',
-        name: 'Massa D\'água'
-      }, {
-        id: 'CB_TERRA_INDIGENA',
-        name: 'Terra Indígena'
-      }, {
-        id: 'CB_UNIDADE_FEDERACAO',
-        name: 'Unidade da Federação'
-      }, {
-        id: 'CB_MUNICIPIO',
-        name: 'Município'
-      }
+    {
+      id: 'CB_AMAZONIA_LEGAL',
+      name: 'Amazônia Legal'
+    }, {
+      id: 'CB_UNIDADE_CONSERVACAO',
+      name: 'Unidade de Conservação'
+    }, {
+      id: 'CB_HIDROGRAFIA',
+      name: 'Hidrografia'
+    }, {
+      id: 'CB_MASSA_DAGUA',
+      name: 'Massa D\'água'
+    }, {
+      id: 'CB_TERRA_INDIGENA',
+      name: 'Terra Indígena'
+    }, {
+      id: 'CB_UNIDADE_FEDERACAO',
+      name: 'Unidade da Federação'
+    }, {
+      id: 'CB_MUNICIPIO',
+      name: 'Município'
+    }
     ];
     results = [];
     for (i = 0, len = thematicMaps.length; i < len; i++) {
@@ -197,7 +201,7 @@
    *
    */
 
-  createMap = function() {
+   createMap = function() {
     var urlJson;
     window.geoServerLegendLink = "http://10.1.25.80:10001//geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=15&HEIGHT=15&layer=";
     urlJson = window.location.origin + '/empreendimento.json';
