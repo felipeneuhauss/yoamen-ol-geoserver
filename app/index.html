@@ -16,6 +16,7 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/popup.css">
     <link rel="stylesheet" href="/bower_components/openlayers3/build/ol.css">
     <link rel="stylesheet" href="/bower_components/openlayers3/css/ol.css">
     <link rel="stylesheet" href="/bower_components/components-font-awesome/css/font-awesome.min.css">
@@ -158,7 +159,10 @@
       </div>
 
   </div>
-
+    <div id="popup" class="ol-popup">
+        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+        <div id="popup-content">Abestato!</div>
+    </div>
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
@@ -190,6 +194,8 @@
 
      <!--build:js scripts/main.js -->
     <script src="scripts/data.js"></script>
+    <script src="scripts/features-functions.js"></script>
+    <script src="scripts/popup.js"></script>
     <script src="scripts/main.js"></script>
     <script src="scripts/core.js"></script>
     <script src="scripts/layout.js"></script>

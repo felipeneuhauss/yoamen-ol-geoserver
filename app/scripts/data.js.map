@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "data.js",
+  "sourceRoot": "",
+  "sources": [
+    "data.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;;AAAA"
+}
